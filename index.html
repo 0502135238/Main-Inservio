@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Insevio – Daily Focus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #eef2f7;
+      margin: 0;
+      padding: 20px;
+      color: #2c2f36;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-weight: 700;
+      color: #3c3c3c;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #dcdcdc;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #7b5de3;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #6848cc;
+    }
+
+    .task-box {
+      background: #f4f5fb;
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 20px;
+      text-align: center;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .notification {
+      margin-top: 16px;
+      padding: 12px;
+      background-color: #dcfce7;
+      color: #065f46;
+      border-left: 6px solid #22c55e;
+      border-radius: 8px;
+      font-weight: bold;
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>👋 Welcome to Insevio</h2>
+    <p>List your 3 goals for today:</p>
+
+    <label for="task1">Task 1</label>
+    <input type="text" id="task1" placeholder="e.g. Revise notes" />
+
+    <label for="task2">Task 2</label>
+    <input type="text" id="task2" placeholder="e.g. Solve past questions" />
+
+    <label for="task3">Task 3</label>
+    <input type="text" id="task3" placeholder="e.g. Watch lecture video" />
+
+    <button id="submitTasksBtn" onclick="submitTasks()">✅ Submit My Tasks</button>
+
+    <div class="task-box" id="progressSection" style="display:none;">
+      <p><strong>Current Task:</strong></p>
+      <p id="currentTaskText">-</p>
+      <button onclick="markAsDone()" id="doneBtn">✅ Mark as DONE</button>
+    </div>
+
+    <div class="notification" id="doneNotification">Task completed!</div>
+
+    <div class="footer">🔥 Keep showing up. Insevio never stops watching 😈</div>
+  </div>
+
+  <script>
+    let currentTaskIndex = 0;
+    let tasks = [];
+
+    function submitTasks() {
+      const t1 = document.getElementById("task1").value.trim();
+      const t2 = document.getElementById("task2").value.trim();
+      const t3 = document.getElementById("task3").value.trim();
+
+      if (!t1 || !t2 || !t3) {
+        alert("Please fill in all 3 tasks");
+        return;
+      }
+
+      tasks = [t1, t2, t3];
+      currentTaskIndex = 0;
+
+      document.getElementById("progressSection").style.display = "block";
+      document.getElementById("currentTaskText").innerText = tasks[currentTaskIndex];
+      document.getElementById("doneNotification").style.display = "none";
+
+      const doneBtn = document.getElementById("doneBtn");
+      doneBtn.disabled = false;
+      doneBtn.innerText = "✅ Mark as DONE";
+    }
+
+    function markAsDone() {
+      if (currentTaskIndex >= tasks.length) return;
+
+      showNotification(`✅ Task ${currentTaskIndex + 1} completed!`);
+      currentTaskIndex++;
+
+      if (currentTaskIndex < tasks.length) {
+        document.getElementById("currentTaskText").innerText = tasks[currentTaskIndex];
+      } else {
+        document.getElementById("currentTaskText").innerText = "🎉 All tasks completed!";
+        const doneBtn = document.getElementById("doneBtn");
+        doneBtn.disabled = true;
+        doneBtn.innerText = "🔥 You're done for today";
+      }
+    }
+
+    function showNotification(message) {
+      if (currentTaskIndex > tasks.length - 1) return;
+
+      const note = document.getElementById("doneNotification");
+      note.innerText = message;
+      note.style.display = "block";
+
+      setTimeout(() => {
+        note.style.display = "none";
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
